@@ -1,0 +1,27 @@
+{
+  "name": "classification-algorithms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PJColombo/Classification-Algorithms.git"
+  },
+  "author": "Paulo J. Colombo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PJColombo/Classification-Algorithms/issues"
+  },
+  "homepage": "https://github.com/PJColombo/Classification-Algorithms#readme",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.3.1",
+    "lodash": "^4.17.11",
+    "popper.js": "^1.15.0",
+    "webpack": "^4.29.6",
+    "webpack-dev-server": "^3.3.1"
+  }
+}
