@@ -11,8 +11,23 @@
 <body>
     <div class="container">
         <h1>Classification Algorithms</h1>
-        <button type="button" class="btn btn-secondary">Secondary</button>
-
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Algorithms:
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Bayes</a>
+                <a class="dropdown-item" href="#">K-means</a>
+                <a class="dropdown-item" href="#">Lloyd</a>
+            </div>
+        </div>
+        <form>
+            <div class="form-group">
+                <label for="inp-datafile">Upload data file</label>
+                <input type="file" class="form-control-file" id="inp-datafile">
+            </div>
+            <button type="button" id="btn-execute" class="btn btn-outline-primary">Run</button>
+        </form>
     </div>
     <script src="./main.js"></script>
 </body>
