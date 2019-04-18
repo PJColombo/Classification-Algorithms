@@ -13,7 +13,7 @@ export default  class Matrix {
                 resRow = [];
                 row = this.matrix[i];
                 for(let j = 0; j < matrix2.width; j++) {
-                    col2 = this.matrixColumn(matrix2, i);
+                    col2 = Matrix.matrixColumn(matrix2.matrix, i);
                     let sum = 0;
                     for(let k = 0; k < row.length; k++)
                         sum += row[k] * col2[k];
@@ -34,7 +34,7 @@ export default  class Matrix {
     transpose() {
         let resMatrix = [];
         for(let i = 0; i < this.width; i++)
-            resMatrix.push(this.matrixColumn(this, i));
+            resMatrix.push(Matrix.matrixColumn(this.matrix, i));
         return new Matrix(resMatrix);
     }
     determinant() {
@@ -143,8 +143,8 @@ export default  class Matrix {
         else
             return null;
     }
-    matrixColumn(matrix, colIndex) {
-        return matrix.matrix.map(row => {
+    static matrixColumn(matrix, colIndex) {
+        return matrix.map(row => {
             return row[colIndex]
         });
     }

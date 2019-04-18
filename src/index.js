@@ -10,7 +10,7 @@ const fr = new FileReader();
 const $dataFileSelector = "#inp-datafile";
 const $executeBtnSelector = "#btn-execute";
 
-let matrixText = [];
+let dataTable, classArr;
 $(document).ready(() => {
     let  m = new Matrix([
         [4, 7],
@@ -38,9 +38,17 @@ function onChangeInpFile(fileReader, selector) {
 
 function onLoadDataFile() {
     let dataText = fr.result;
-    matrixText = dataText.split(/\n/).map(val => {
+    console.log(dataText);
+    let matrixText = dataText.split(/\n/).map(val => {
         return val.split(",");
     });
+    dataTable = matrixText.map(row => {
+        return row.map((val, index) => {
+            if(index < row.length - 1)
+                return parseInt();
 
+        });
+    })
+    console.log(Matrix.matrixColumn(matrixText, 1));
     console.log(matrixText);
 }
