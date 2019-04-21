@@ -7,27 +7,48 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css?family=Economica" rel="stylesheet">
     <title>Classification Algorithms</title>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
     <div class="container">
         <h1>Classification Algorithms</h1>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Algorithms:
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Bayes</a>
-                <a class="dropdown-item" href="#">K-means</a>
-                <a class="dropdown-item" href="#">Lloyd</a>
+        <div class="algorithm-menu">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Algorithms:
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Bayes</a>
+                    <a class="dropdown-item" href="#">K-means</a>
+                    <a class="dropdown-item" href="#">Lloyd</a>
+                </div>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="inp-datafile">Upload data file</label>
+                    <input type="file" class="form-control-file" id="inp-datafile">
+                </div>
+                <button type="button" id="btn-execute" class="btn btn-outline-primary">Execute Learning</button>
+            </form>
+            <div class="classify-container">
+                Test Data Input File <input id="classify-inp-file" type="file">
+                <br>
+                <br>
+                Test Data Input <input id="classify-inp" type="text" placeholder="Enter data separated by spaces...">
+                <button type="button" id="btn-classify" class="btn btn-outline-primary">Classify Data</button>
+            </div>
+
+        </div>
+        <h2 id="algorithm-name"></h2>
+        <div class="bayes-container">
+            <div class="test-data-container">
+                adssa
+            </div>
+            <h3>Bayes Learning Data Info</h3>
+            <div class="bayes-learning-data">
+
             </div>
         </div>
-        <form>
-            <div class="form-group">
-                <label for="inp-datafile">Upload data file</label>
-                <input type="file" class="form-control-file" id="inp-datafile">
-            </div>
-            <button type="button" id="btn-execute" class="btn btn-outline-primary">Run</button>
-        </form>
     </div>
     <script src="./main.js"></script>
 </body>

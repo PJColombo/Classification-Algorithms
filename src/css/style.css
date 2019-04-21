@@ -16,7 +16,7 @@ label {
     text-transform: uppercase;
 
 }
-form {
+.algorithm-menu {
     border: 1px solid rgba(68, 68, 68, 0.71);
     border-radius: 10px 10px 10px 10px;
     -moz-border-radius: 10px 10px 10px 10px;
@@ -27,12 +27,46 @@ form {
     margin-bottom: 6%;
 }
 
+.dropdown {
+    align-self: center;
+    margin-bottom: 5%;
+}
 form button {
     align-self: flex-end;
     justify-self: flex-end;
     width: 8%;
 }
 
+.classify-container {
+    margin: 5% 0 2% 0;
+}
+
+#classify-inp {
+    width: 20%;
+}
+
+#algorithm-name {
+    text-align: center;
+    margin: 2% 0;
+}
+.c-matrix {
+    border: 1px solid black;
+}
 .container {
+    margin-bottom: 5%;
+}
+
+.bayes-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+.bayes-container > h3 {
+    text-decoration: underline;
+    margin-bottom: 5%;
+    text-align: center;
+}
+
+.test-data-container {
     margin-bottom: 5%;
 }

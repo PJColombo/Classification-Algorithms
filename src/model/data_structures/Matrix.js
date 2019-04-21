@@ -1,10 +1,32 @@
 export default  class Matrix {
     constructor(matrix) {
         this.matrix = matrix;
-        this.height = matrix.length;
-        this.width = matrix[0].length;
+        if(matrix && matrix[0]) {
+            this.height = matrix.length;
+            this.width = matrix[0].length;
+        }
+        else {
+            this.height = 0;
+            this.width = 0;
+        }
     }
 
+    basicArithmeticOperation(matrix2, addition) {
+        if(this.height === matrix2.height && this.width === matrix2.width) {
+            let resMatrix = [];
+            for(let i = 0; i < this.height; i++) {
+                let row = [];
+                for(let j = 0; j < this.width; j++) {
+                    if(addition)
+                        row.push(this.matrix[i][j] + matrix2.matrix[i][j]);
+                    else
+                        row.push(this.matrix[i][j] - matrix2.matrix[i][j]);
+                }
+                resMatrix.push(row);
+            }
+            return new Matrix(resMatrix);
+        }
+    }
     multiply(matrix2) {
         let resMatrix = [];
         if(this.width === matrix2.height) {
@@ -13,10 +35,12 @@ export default  class Matrix {
                 resRow = [];
                 row = this.matrix[i];
                 for(let j = 0; j < matrix2.width; j++) {
-                    col2 = Matrix.matrixColumn(matrix2.matrix, i);
+                    col2 = Matrix.matrixColumn(matrix2.matrix, j);
                     let sum = 0;
-                    for(let k = 0; k < row.length; k++)
-                        sum += row[k] * col2[k];
+                    for(let k = 0; k < row.length; k++) {
+                        let n = row[k] * col2[k];
+                        sum += n;
+                    }
                     resRow.push(sum);
                 }
                 resMatrix.push(resRow);
@@ -24,10 +48,19 @@ export default  class Matrix {
             return new Matrix(resMatrix);
         }
     }
+    multiplyByNumber(n) {
+        return new Matrix(this.matrix.map(row => {
+            return row.map(val => {
+                let mul = val * n;
+                return mul.toFixed(2);
+            });
+        }));
+    }
     divideBy(n) {
         return new Matrix(this.matrix.map(row => {
             return row.map(val => {
-                return val / n;
+                let div = val / n;
+                return div.toFixed(2);
             });
         }));
     }
@@ -127,7 +160,7 @@ export default  class Matrix {
                 return (m.matrix[0][0] * m.matrix[1][1]) - (m.matrix[0][1] * m.matrix[1][0]);
             let temporary;
             for(let i = 0; i < m.width; i++) {
-                temporary = m.createFilledMatrix(m.width, m.height);
+                temporary = m.createFilledMatrix(m.width - 1, m.height - 1);
                 for(let j = 1; j < m.height; j++) {
                     for(let k = 0; k < m.width; k++) {
                         if (k < i)
@@ -143,11 +176,7 @@ export default  class Matrix {
         else
             return null;
     }
-    static matrixColumn(matrix, colIndex) {
-        return matrix.map(row => {
-            return row[colIndex]
-        });
-    }
+
     createFilledMatrix(width, height, defaultValue) {
         return new Matrix([...Array(height)].map(val => {
             return [...Array(width)].map(e => {
@@ -166,5 +195,11 @@ export default  class Matrix {
         return new Matrix(this.matrix.map(row => {
             return Array.from(row);
         }));
+    }
+
+    static matrixColumn(matrix, colIndex) {
+        return matrix.map(row => {
+            return row[colIndex];
+        });
     }
 }
