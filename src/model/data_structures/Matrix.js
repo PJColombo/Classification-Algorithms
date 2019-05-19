@@ -52,7 +52,7 @@ export default  class Matrix {
         return new Matrix(this.matrix.map(row => {
             return row.map(val => {
                 let mul = val * n;
-                return mul.toFixed(2);
+                return mul;
             });
         }));
     }
@@ -60,7 +60,7 @@ export default  class Matrix {
         return new Matrix(this.matrix.map(row => {
             return row.map(val => {
                 let div = val / n;
-                return div.toFixed(2);
+                return div;
             });
         }));
     }

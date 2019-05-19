@@ -6,6 +6,8 @@ import './css/style.css';
 import Matrix from "./model/data_structures/Matrix";
 import Bayes from "./model/classification_algorithms/BayesAlgorithm";
 import ClassificationAlgorithmFactory from "./model/classification_algorithms/ClassificationAlgorithmFactory";
+import KMeansAlgorithm from "./model/classification_algorithms/KMeansAlgorithm";
+import LloydAlgorithm from "./model/classification_algorithms/LloydAlgorithm";
 
 const fr = new FileReader();
 
@@ -16,8 +18,9 @@ const $algorithmNameSelector = "#algorithm-name";
 const $algorithmContainerSelector = ".bayes-learning-data";
 const $classifyInpSelector = "#classify-inp";
 const $testContainerSelector = ".test-data-container";
+const $testDataResultsSelector = ".test-data-results";
 const $classifyBtnSelector = "#btn-classify";
-
+const $clearBtnSelector = "#btn-clear";
 // We need classesTable to keep record of every itemn class
 let dataTable;
 let selectedAlgorithm;
@@ -32,16 +35,32 @@ $(document).ready(() => {
     $($dropdownMenuItemSelector).on("click", onDropdownItemSelected);
     $($classifyInpSelector).on("change paste input", onChangeInputTestData);
     $($classifyBtnSelector).on("click", onClickClassifyData);
+    $($clearBtnSelector).on("click", clearFields);
 });
 
-
+function clearFields() {
+    $($algorithmContainerSelector).empty();
+    $($testDataResultsSelector).empty();
+    $($testContainerSelector).empty();
+}
 
 function onClickClassifyData() {
+    console.log(dataTable)
     if(!algorithm)
-        console.log("algorithm doesn't exists");
+        alert('Choose an algorithm, upload data file and click "Execute learning".');
     else {
-        console.log(testDataMatrix);
-        console.log(algorithm.classifyData(testDataMatrix));
+        $($testDataResultsSelector).empty();
+
+        if(testDataMatrix && testDataMatrix.width === dataTable[0].length - 1) {
+            let res = algorithm.classifyData(testDataMatrix);
+            if(selectedAlgorithm.toLowerCase() !== "k-means")
+                $($testDataResultsSelector).append(`<p>Sample data  is at a distance of <span class="result-number">${res.distance}</span> from <span class="result-group">${res.classData}</span></p>`);
+            else
+                $($testDataResultsSelector).append(`<p>Sample data has <span class="result-number">${res.probability*100}</span> probability to be <span class="result-group">${res.classData}</span></p>`);
+        }
+        else {
+            alert("Please, type in a valid input (Remember that every number must be separated by spaces).");
+        }
     }
 }
 
@@ -93,9 +112,83 @@ function displayInputTestData(inputData) {
 
 function onExecuteLearning() {
     console.log("Executing algorithm");
-    algorithm = new Bayes(dataTable);
-    algorithm.execute();
-    showBayesResults(algorithm.samples);
+    console.log(selectedAlgorithm);
+    // algorithm = ClassificationAlgorithmFactory.createClassificationAlgorithm(selectedAlgorithm);
+    if(selectedAlgorithm.toLowerCase() === "bayes") {
+        algorithm = new Bayes(dataTable);
+        algorithm.execute();
+        showBayesResults(algorithm.samples)
+    }
+    else if (selectedAlgorithm.toLowerCase() === "lloyd") {
+        algorithm = new LloydAlgorithm(dataTable);
+        algorithm.execute();
+        showLloydResults({centroids: algorithm.centroids, classes: algorithm.classes});
+    }
+    else if (selectedAlgorithm.toLowerCase() === "k-means") {
+        algorithm = new KMeansAlgorithm(dataTable);
+        algorithm.execute();
+        showKMeansResults({centroids: algorithm.centroids, uMatrix: algorithm.uMatrix, classes: algorithm.classes});
+    }
+}
+
+function showLloydResults(data) {
+    $($algorithmContainerSelector).empty();
+    let centroidsDiv = "";
+    let i = 1;
+    data.centroids.forEach((centroid, index) => {
+        centroidsDiv = `<div><h4>Class ${data.classes[index]} Final Centroid</h4></div>\\[ \\mathbf{C}_${i} = \\begin{pmatrix}\n`;
+        centroid.matrix.forEach(row => {
+            row.forEach((val, index) => {
+                if(index < row.length - 1)
+                    centroidsDiv += `${val} & `;
+                else
+                    centroidsDiv += `${val}\\\\\n`;
+            });
+        });
+        centroidsDiv += `\\end{pmatrix}\\]</div>`;
+        $($algorithmContainerSelector).append(centroidsDiv);
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        i++;
+    });
+}
+
+function showKMeansResults(data) {
+    console.log(data);
+    $($algorithmContainerSelector).empty();
+    let uMatrixDiv, centroidsDiv;
+    let i = 1;
+    centroidsDiv = "";
+    uMatrixDiv = `<div><h4>Final U Matrix</h4></div><div class="u-matrix-container">\\[U = \\begin{pmatrix}\n`;
+    data.uMatrix.matrix.forEach(row => {
+        console.log(row);
+        row.forEach((val, index) => {
+            if(index < row.length - 1)
+                uMatrixDiv += `${val} & `;
+            else
+                uMatrixDiv += `${val}\\\\\n`;
+        });
+
+    });
+    uMatrixDiv += `\\end{pmatrix}\\]</div>`;
+    $($algorithmContainerSelector).append(uMatrixDiv);
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    i++;
+    i = 1;
+    data.centroids.forEach((centroid, index) => {
+        centroidsDiv = `<div><h4>Class ${data.classes[index]} Final Centroid</h4></div>\\[ \\mathbf{V}_${i} = \\begin{pmatrix}\n`;
+        centroid.matrix.forEach(row => {
+            row.forEach((val, index) => {
+                if(index < row.length - 1)
+                    centroidsDiv += `${val} & `;
+                else
+                    centroidsDiv += `${val}\\\\\n`;
+            });
+        });
+        centroidsDiv += `\\end{pmatrix}\\]</div>`;
+        $($algorithmContainerSelector).append(centroidsDiv);
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        i++;
+    });
 }
 
 function showBayesResults(samples) {
@@ -131,6 +224,7 @@ function showBayesResults(samples) {
 function onDropdownItemSelected() {
     selectedAlgorithm = $(this).text().toLowerCase();
     $($algorithmNameSelector).text($(this).text());
+    clearFields();
 }
 
 function onChangeInpFile(fileReader, selector) {
@@ -147,6 +241,7 @@ function onLoadDataFile() {
     let matrixText = dataText.split(/\n/).map(val => {
         return val.split(",");
     });
+    console.log(matrixText);
     dataTable = matrixText.map(row => {
         return row.map((val, index) => {
             if(index < row.length - 1)
@@ -155,4 +250,9 @@ function onLoadDataFile() {
                 return val;
         });
     });
+    if(dataTable[dataTable.length - 1].length > 0 && dataTable[dataTable.length - 1][0] === "") {
+        console.log("Deleting empty position...");
+        dataTable.pop();
+    }
 }
+

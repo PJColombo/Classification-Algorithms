@@ -1,4 +1,6 @@
 import BayesAlgorithm from "./BayesAlgorithm";
+import LloydAlgorithm from "./LloydAlgorithm";
+import KMeansAlgorithm from "./KMeansAlgorithm";
 
 export default  class ClassificationAlgorithmFactory {
     static createClassificationAlgorithm(name, datatable) {
@@ -6,11 +8,11 @@ export default  class ClassificationAlgorithmFactory {
             case "bayes":
                 return new BayesAlgorithm(datatable);
             case "lloyd":
-                return -1;
+                return new LloydAlgorithm(datatable);
             case "k-means":
-                return -1;
+                return new KMeansAlgorithm(datatable);
             default:
-                return -1;
+                return new KMeansAlgorithm(datatable);
         }
     }
 }

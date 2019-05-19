@@ -56,15 +56,15 @@ export default class BayesAlgorithm {
     classifyData(dataMatrix) {
         let res = {
             classData: "",
-            probability: Number.MAX_VALUE
+            distance: Number.MIN_VALUE
         };
-        let currProbability;
+        let currDistance;
         this.samples.forEach((value, key) => {
             if(value.cMatrix.determinant() !== 0) {
-                currProbability = this.calculateProbability(dataMatrix, value.cMatrix, value.averageMatrix);
-                if(currProbability < res.probability) {
-                    console.log("aqui " + currProbability);
-                   res.probability = currProbability;
+                currDistance = this.calculateProbability(dataMatrix, value.cMatrix, value.averageMatrix);
+                if(currDistance > res.distance) {
+                    console.log("aqui " + currDistance);
+                   res.distance = currDistance;
                    res.classData = key;
                 }
             }
@@ -82,7 +82,7 @@ export default class BayesAlgorithm {
         secondMatrixOperand = dataMatrix.basicArithmeticOperation(avgMatrix, false);
         firstMatrixOperand = secondMatrixOperand.transpose();
         inverseCMatrix = cMatrix.inverse();
-        console.log(secondMatrixOperand);
+        console.log(inverseCMatrix);
         return secondMatrixOperand.multiply(inverseCMatrix).multiply(firstMatrixOperand).matrix[0][0];
     }
 }
